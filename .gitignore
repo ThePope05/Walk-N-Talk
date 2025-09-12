@@ -21,6 +21,7 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 
+.env
 /public/build
 /storage/pail
 .env.backup
