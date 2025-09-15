@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function registerUser(Request $request)
-    {        
+    {
         if (!$this->allInputsFilled($request))
             return redirect()->back()->withInput()->withErrors(['msg' => 'Not all inputs are filled']);
-        
+
         $credentials = $request->validate([
             'email' => ['required', 'email', 'unique:users'],
             'number' => ['required', 'unique:users'],
@@ -29,8 +29,7 @@ class UserController extends Controller
         if ($request->input('password') !== $request->input('confirmPassword'))
             return redirect()->back()->withInput()->withErrors(['msg' => 'Passwords do not match']);
 
-        try
-        {
+        try {
             $user = new User;
 
             $user->firstName = $request->input('firstName');
@@ -39,13 +38,21 @@ class UserController extends Controller
             $user->number = $request->input('number');
             $user->email = $request->input('email');
             $user->password = Hash::make($request->input('password'));
-        
+
             $user->save();
-            
+
+            $credentials = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required'],
+            ]);
+
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                return redirect()->intended('/'); // TODO: change to queue page when we have that
+            }
+
             return view('user/login');
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             dd($e->getMessage());
         }
     }
@@ -54,14 +61,13 @@ class UserController extends Controller
     {
         if (!$this->allInputsFilled($request))
             return redirect()->back()->withInput()->withErrors(['msg' => 'Not all inputs are filled']);
-        
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/'); // TODO: change to queue page when we have that
         }
@@ -69,12 +75,12 @@ class UserController extends Controller
         return redirect()->back()->onlyInput('email')->withErrors(['msg' => 'The provided credentials do not match our records.']);
     }
 
-    public function allInputsFilled(Request $request) : bool
+    public function allInputsFilled(Request $request): bool
     {
         foreach ($request->all() as $name => $value)
             if (is_null($value) || empty($value))
                 return false;
-        
+
         return true;
     }
 }
