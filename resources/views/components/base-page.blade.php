@@ -18,6 +18,7 @@
 
         <!-- Styles / Scripts -->
         @vite(['resources/css/app.css', 'resources/css/manualStyling.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
     <body class=" min-h-svh bg-[#F7F6ED]">
         <header class="absolute top-0 left-0 flex items-center justify-center w-screen h-36 bg-[#F0E6C2]">
@@ -56,5 +57,7 @@
         <main class="flex h-screen pt-36 justify-center items-center">
             {{ $slot }}
         </main>
+        
+        @livewireScripts
     </body>
 </html>
