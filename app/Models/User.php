@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -18,7 +20,10 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'firstName',
+        'lastName',
+        'tribe',
+        'number',
         'email',
         'password',
     ];
@@ -44,5 +49,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public static function create(Request $request)
+    {
+        $user = new User;
+
+        $user->firstName = $request->input('firstName');
+        $user->lastName = $request->input('lastName');
+        $user->tribe = $request->input('tribe');
+        $user->number = $request->input('number');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('email'));
+
+        $user->save();
+
+        return redirect(route('user.login'));
     }
 }
