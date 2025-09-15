@@ -19,9 +19,11 @@
         <!-- Styles / Scripts -->
         @vite(['resources/css/app.css', 'resources/css/manualStyling.css', 'resources/js/app.js'])
     </head>
-    <body class=" min-h-svh flex flex-col bg-[#F7F6ED]">
+    <body class=" min-h-svh bg-[#F7F6ED]">
         <header class="absolute top-0 left-0 flex items-center justify-center w-screen h-36 bg-[#F0E6C2]">
-            <img src="{{ asset('/img/Logo.png') }}" class="bg-cover h-3/4">
+            <a href="{{ route('welcome') }}" class=" h-3/4">
+                <img src="{{ asset('/img/Logo.png') }}" class="bg-cover h-full">
+            </a>    
             <div class="absolute bottom-0 flex items-center justify-center">
                 <div class="bg-green-700 w-1 h-1 rounded-full mr-1"></div><p class="text-[#152B38] text-center font-lalezar">69 users online</p>
             </div>
@@ -51,7 +53,7 @@
                 @endif
             </div>
         </header>
-        <main class="flex h-full pt-36 justify-center items-center">
+        <main class="flex h-screen pt-36 justify-center items-center">
             {{ $slot }}
         </main>
     </body>
