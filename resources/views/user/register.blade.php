@@ -34,6 +34,10 @@
         <div class="flex justify-center mt-6 w-full">
             <button type="submit" class="text-center text-[#F7F6ED] font-bold bg-[#519F66] drop-shadow-md p-8 py-2 w-3/6 rounded-full">MAAK ACCOUNT</button>
         </div>
-        {!! $errors->first('msg', '<p class="text-red-600 mt-2">:message</p>') !!}
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <p class="text-red-600 mt-2">{{ $error }}</p>
+            @endforeach
+        @endif
     </form>
 </x-base-page>

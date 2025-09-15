@@ -25,7 +25,7 @@
             <div class="absolute bottom-0 flex items-center justify-center">
                 <div class="bg-green-700 w-1 h-1 rounded-full mr-1"></div><p class="text-[#152B38] text-center font-lalezar">69 users online</p>
             </div>
-            <div class="absolute flex right-2 items-center justify-center bg-[#F7F6ED] p-2 rounded-full">
+            <div class="absolute flex right-2 px-5 items-center justify-center bg-[#F7F6ED] p-2 rounded-full">
                 @if (!Auth::check())
                 <a href="{{ route('user.login'); }}" class="mr-3">
                     <span class="material-symbols-outlined">

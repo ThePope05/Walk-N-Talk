@@ -11,13 +11,17 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function registerUser(Request $request)
-    {
-        //dd($request->all());
-        
+    {        
         if (!$this->allInputsFilled($request))
             return redirect()->back()->withInput()->withErrors(['msg' => 'Not all inputs are filled']);
         
-        // TODO: check if email and number already exist HERE <----
+        $credentials = $request->validate([
+            'email' => ['required', 'email', 'unique:users'],
+            'number' => ['required', 'unique:users'],
+        ], [
+            'email.unique'   => 'That email is already registered.',
+            'number.unique'   => 'That number is already registered.',
+        ]);
 
         if (!str_contains($request->input('email'), 'hu.nl'))
             return redirect()->back()->withInput()->withErrors(['msg' => 'Must be a HU email']);
