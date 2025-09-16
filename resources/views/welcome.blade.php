@@ -1,5 +1,5 @@
 <x-base-page>
-    <main class="flex h-full justify-center items-center">
-        
+    <main class="w-3/5 flex flex-col items-center">
+        <livewire:queue-button />
     </main>
 </x-base-page>

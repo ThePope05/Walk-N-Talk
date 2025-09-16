@@ -57,7 +57,5 @@
         <main class="flex h-screen pt-36 justify-center items-center">
             {{ $slot }}
         </main>
-        
-        @livewireScripts
     </body>
 </html>
