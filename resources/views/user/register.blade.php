@@ -1,5 +1,5 @@
 <x-base-page>
-    <form class="w-3/5 flex flex-col items-center" action="{{ route('user.register') }}" method="post">
+    <form class="w-3/5 flex flex-col items-center" action="{{ route('register') }}" method="post">
         <h1 class="text-5xl font-bold text-[#666562]">Register</h1>
         @csrf    
         <div class="flex mt-3 w-full justify-between">

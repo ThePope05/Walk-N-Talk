@@ -1,1 +1,13 @@
 /* If something is hard to do with TailWind we can do regular css in here */
+
+#QueueButton {
+    transition: .3s all ease-out;
+}
+
+#QueueButton:hover {
+    box-shadow: 0 0 5rem #0003;
+}
+
+.shadow-custom-lg {
+    box-shadow: 0 0 15rem #0002;
+}

@@ -25,22 +25,22 @@
                 <img src="{{ asset('/img/Logo.png') }}" class="bg-cover h-full">
             </a>    
             <div class="absolute bottom-0 flex items-center justify-center">
-                <div class="bg-green-700 w-1 h-1 rounded-full mr-1"></div><p class="text-[#152B38] text-center font-lalezar">69 users online</p>
+                <div class="bg-[#519F66] w-1 h-1 rounded-full mr-1"></div><p class="text-[#152B38] text-center font-lalezar">69 users online</p>
             </div>
             <div class="absolute flex right-2 px-5 items-center justify-center bg-[#F7F6ED] p-2 rounded-full">
                 @if (!Auth::check())
-                <a href="{{ route('user.login'); }}" class="mr-3">
+                <a href="{{ route('login'); }}" class="mr-3">
                     <span class="material-symbols-outlined">
                         login
                     </span>
                 </a>
-                <a href="{{ route('user.register'); }}">
+                <a href="{{ route('register'); }}">
                     <span class="material-symbols-outlined">
                         person_add
                     </span>
                 </a>
                 @else
-                <a href="{{ route('user.logout'); }}" class="mr-3">
+                <a href="{{ route('logout'); }}" class="mr-3">
                     <span class="material-symbols-outlined">
                         logout
                     </span>

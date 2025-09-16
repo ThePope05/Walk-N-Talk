@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
@@ -65,5 +66,28 @@ class User extends Authenticatable
         $user->save();
 
         return redirect(route('user.login'));
+    }
+
+    public function queue() : HasOne
+    {
+        return $this->hasOne(Queue::class);
+    }
+
+    public function tryStartQueue()
+    {
+        if ($this->queue()->exists())
+            return false;
+
+        $this->queue()->create();
+        return true;
+    }
+
+    public function tryStopQueue()
+    {
+        if (!$this->queue()->exists())
+            return false;
+
+        $this->queue()->delete();
+        return true;
     }
 }
