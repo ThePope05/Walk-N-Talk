@@ -41,10 +41,7 @@ class QueueController extends Controller
     // app/Http/Controllers/QueueController.php
     public function getEntries()
     {
-        $entries = Queue::with(['user' => function ($query) {
-                        $query->leftJoin('users', 'user_id', '=', 'users.id');
-                    }])->get();
+        $entries = Queue::with('user')->where('user_id', '!=', Auth::id())->get();
         return response()->json($entries);
     }
-
 }

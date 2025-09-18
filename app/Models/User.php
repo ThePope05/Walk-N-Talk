@@ -4,12 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -69,17 +71,17 @@ class User extends Authenticatable
         return redirect(route('user.login'));
     }
 
-    public function queue() : HasOne
+    public function queue(): HasOne
     {
         return $this->hasOne(Queue::class);
     }
 
-    public function walkMatchesAsUser1() : HasMany
+    public function walkMatchesAsUser1(): HasMany
     {
         return $this->hasMany(WalkMatch::class, 'user_id_1');
     }
 
-    public function walkMatchesAsUser2() : HasMany
+    public function walkMatchesAsUser2(): HasMany
     {
         return $this->hasMany(WalkMatch::class, 'user_id_2');
     }
@@ -94,7 +96,9 @@ class User extends Authenticatable
         if ($this->queue()->exists())
             return false;
 
-        $this->queue()->create();
+        $this->queue()->create([
+            'user_id' => Auth::id()
+        ]);
         return true;
     }
 
