@@ -2,12 +2,17 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QueueController;
+use App\Http\Controllers\WalkMatchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (Auth::user())
-        return view('welcome', ['userIsQueueing' => QueueController::userIsQueued(Auth::user()->id)]);
+        return view('welcome', 
+    [
+        'userIsQueueing' => QueueController::userIsQueued(Auth::user()->id), 
+        'queued_at' => QueueController::userQueuedAt(Auth::user()->id)
+    ]);
 
     return view('welcome');
 })->name('welcome');
@@ -35,3 +40,9 @@ Route::get('user/logout', function() {
 // QUEUE ROUTES
 Route::get('user/queue/start', [QueueController::class, 'queueStart'])->middleware('auth')->name('queue.start');
 Route::get('user/queue/stop', [QueueController::class, 'queueStop'])->middleware('auth')->name('queue.stop');
+
+// GET ENTRIES JSON
+Route::get('/queue/entries', [QueueController::class, 'getEntries']);
+
+// START MATCH 
+Route::post('/walkMatch', [WalkMatchController::class, 'getEntries']);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -71,6 +72,21 @@ class User extends Authenticatable
     public function queue() : HasOne
     {
         return $this->hasOne(Queue::class);
+    }
+
+    public function walkMatchesAsUser1() : HasMany
+    {
+        return $this->hasMany(WalkMatch::class, 'user_id_1');
+    }
+
+    public function walkMatchesAsUser2() : HasMany
+    {
+        return $this->hasMany(WalkMatch::class, 'user_id_2');
+    }
+
+    public function walkMatches()
+    {
+        return $this->walkMatchesAsUser1->merge($this->walkMatchesAsUser2);
     }
 
     public function tryStartQueue()
