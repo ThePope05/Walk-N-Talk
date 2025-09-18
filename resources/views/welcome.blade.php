@@ -4,6 +4,7 @@
         @if (isset($userIsQueueing))
         <a id="QueueButton" href="{{ ($userIsQueueing) ? route('queue.stop') : route('queue.start') }}" class="bg-[#519F66] rounded-full w-[250px] h-[250px] flex justify-center items-center">
             @if ($userIsQueueing)
+            <meta name="csrf-token" content="{{ csrf_token() }}">
             <p id="queue-time" data-queued-at="{{ $queued_at }}" class="w-3/4 text-4xl text-center font-black text-[#F8F6EF]"></p>
             @else
             <img src="{{ asset('/img/WalkNTalk.png') }}" class="w-3/4" alt="WalkNTalk">
@@ -67,13 +68,17 @@
         startTimer();
 
         function createMatch(_otherUserId) {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            console.log("Starting match between current user and " + _otherUserId);
             fetch("/walkMatch", {
                 method: "POST",
                 body: JSON.stringify({
                     otherUserId: _otherUserId
                 }),
                 headers: {
-                    "Content-type": "application/json; charset=UTF-8"
+                    "Content-type": "application/json; charset=UTF-8",
+                    "X-CSRF-TOKEN": token
                 }
             });
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\WalkMatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +17,13 @@ class WalkMatchController extends Controller
 
         $user1->queue()->delete();
         $user2->queue()->delete();
+
+        $walkMatch = new WalkMatch();
+        $walkMatch->user_id_1 = $user1->id;
+        $walkMatch->user_id_2 = $user2->id;
+        $walkMatch->completed = false;
+
+        $walkMatch->save();
 
         return redirect(route('/'));
     }
