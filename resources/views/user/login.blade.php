@@ -1,4 +1,7 @@
 <x-base-page>
+    @section('users_online')
+    {{ $users_online }}
+    @endsection
     <form class="w-3/5 flex flex-col items-center" action="{{ route('login') }}" method="post">
         <h1 class="text-5xl font-bold text-[#666562]">Login</h1>
         @csrf

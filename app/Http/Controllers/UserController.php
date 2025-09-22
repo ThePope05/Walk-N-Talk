@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User as User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -82,5 +83,10 @@ class UserController extends Controller
                 return false;
 
         return true;
+    }
+
+    public static function getUserCount()
+    {
+        return DB::table('sessions')->count('user_id') ?? 0;
     }
 }

@@ -23,9 +23,9 @@
         <header class="absolute top-0 left-0 flex items-center justify-center w-screen h-36 bg-[#F0E6C2]">
             <a href="{{ route('welcome') }}" class=" h-3/4">
                 <img src="{{ asset('/img/Logo.png') }}" class="bg-cover h-full">
-            </a>    
+            </a>
             <div class="absolute bottom-0 flex items-center justify-center">
-                <div class="bg-[#519F66] w-1 h-1 rounded-full mr-1"></div><p class="text-[#152B38] text-center font-lalezar">69 users online</p>
+                <div class="bg-[#519F66] w-1 h-1 rounded-full mr-1"></div><p class="text-[#152B38] text-center font-lalezar">@yield('users_online') users online</p>
             </div>
             <div class="absolute flex right-2 px-5 items-center justify-center bg-[#F7F6ED] p-2 rounded-full">
                 @if (!Auth::check())

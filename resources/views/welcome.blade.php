@@ -1,4 +1,7 @@
 <x-base-page>
+    @section('users_online')
+    {{ $users_online }}
+    @endsection
     @auth
     <div class="bg-white shadow-custom-lg rounded-full h-96 w-96 flex justify-center items-center">
         @if (isset($userIsQueueing))

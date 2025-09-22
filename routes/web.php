@@ -12,23 +12,33 @@ Route::get('/', function () {
             'welcome',
             [
                 'userIsQueueing' => QueueController::userIsQueued(Auth::user()->id),
-                'queued_at' => QueueController::userQueuedAt(Auth::user()->id)
+                'queued_at' => QueueController::userQueuedAt(Auth::user()->id),
+                'users_online' => UserController::getUserCount()
             ]
         );
 
-    return view('welcome');
+    return view('welcome',
+        [
+            'users_online' => UserController::getUserCount()
+        ]);
 })->name('welcome');
 
 
 // LOGIN ROUTES
 Route::get('user/login', function () {
-    return view('user/login');
+    return view('user/login',
+        [
+            'users_online' => UserController::getUserCount()
+        ]);
 })->name('login');
 Route::post('user/login', [UserController::class, 'loginUser'])->name('login');
 
 // REGISTER ROUTES
 Route::get('user/register', function () {
-    return view('user/register');
+    return view('user/register',
+        [
+            'users_online' => UserController::getUserCount()
+        ]);
 })->name('register');
 Route::post('user/register', [UserController::class, 'registerUser'])->name('register');
 
