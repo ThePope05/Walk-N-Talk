@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\QuestionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,3 +27,6 @@ Route::name('user.')->group(function() {
         return redirect('/');
     })->name('logout');
 });
+
+Route::get('/questions/{category}', [QuestionController::class, 'show'])
+    ->name('questions.show');
