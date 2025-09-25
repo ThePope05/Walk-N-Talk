@@ -33,7 +33,7 @@ Route::get('user/logout', function () {
 
 // API ENDPOINTS
 Route::get('/queue/entries', [QueueController::class, 'getEntries']);
-Route::get('/unacceptedMatch/entries/{id}', [UnacceptedMatchController::class, 'getEntries']);
+Route::get('/unacceptedMatch/entries', [UnacceptedMatchController::class, 'getEntries']);
 
 Route::get('user/queue/start', [QueueController::class, 'queueStart'])->middleware('auth')->name('queue.start');
 Route::get('user/queue/stop', [QueueController::class, 'queueStop'])->middleware('auth')->name('queue.stop');

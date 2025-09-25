@@ -2,14 +2,14 @@
     @auth
     <span class="hidden" id="userId">{{ auth()->id() }}</span>
     <div class="bg-white shadow-custom-lg rounded-full h-96 w-96 flex justify-center items-center">
-        <a id="QueueButton" onclick="toggleQueueing" class="bg-[#519F66] rounded-full w-[250px] h-[250px] flex justify-center items-center">
-            <meta name="csrf-token" content="{{ csrf_token() }}">
-            <p id="queue-time" class="w-3/4 text-4xl text-center font-black text-[#F8F6EF]"></p>
+        <button id="QueueButton" onclick="toggleQueueing()" class="bg-[#519F66] cursor-pointer rounded-full w-[250px] h-[250px] flex justify-center items-center">
+            <meta name="csrf-token" content="{{ csrf_token() }}" />
+            <p id="queue-time" class="w-3/4 text-4xl text-center hidden font-black text-[#F8F6EF]"></p>
 
             <img id="queue-img" src="{{ asset('/img/WalkNTalk.png') }}" class="w-3/4" alt="WalkNTalk">
-        </a>
+        </button>
 
-        <div class="bg-[#0005] absolute hidden w-screen h-screen top-0 left-0 justify-center items-center">
+        <div id="match-found-screen" class="bg-[#0005] absolute hidden w-screen h-screen top-0 left-0 justify-center items-center">
             <div class="bg-[#F0E6C2] rounded-lg w-2/5 pb-6 flex flex-col justify-center items-center">
                 <h3 class="text-[#519F66] text-4xl font-black text-center pt-4">Partner gevonden!</h3>
                 <hr class="border-[#519F66] border-2 my-3 w-3/5 mx-auto">
@@ -24,15 +24,16 @@
         const queueImgEl = document.querySelector("#queue-img");
         const queueTimeEl = document.querySelector("#queue-time");
 
-        function toggleQueueing() {
-            if (isQueueing()) {
-                fetch("/user/queue/stop");
+        async function toggleQueueing() {
+            if (await isQueueing()) {
+                await fetch("/user/queue/stop");
                 queueTimeEl.classList.add("hidden");
                 queueImgEl.classList.remove("hidden");
                 queueImgEl.classList.add("flex");
+                queueTimeEl.textContent = "00:00";
                 _isQueueing = false;
             } else {
-                fetch("/user/queue/start");
+                await fetch("/user/queue/start");
                 queueTimeEl.classList.remove("hidden");
                 queueImgEl.classList.add("hidden");
                 queueImgEl.classList.remove("flex");
@@ -41,9 +42,14 @@
         }
 
         async function isQueueing() {
-            var data = await fetch('user/queue/isQueueing');
-            var isQueueing = await data.json();
-            return isQueueing;
+            try{
+                var data = await fetch('user/queue/isQueueing');
+                var isQueueing = await data.json();
+                _isQueueing = isQueueing;
+                return isQueueing;
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         // TODO: move the start/stop queue to an api request too. 
@@ -52,13 +58,16 @@
                 return;
 
             try {
-                var unacceptedMatch = await fetch('/unacceptedMatch/entries/' + userId);
+                var unacceptedMatch = await fetch('/unacceptedMatch/entries');
                 unacceptedMatch = await unacceptedMatch.json();
 
+                console.log(unacceptedMatch);
+
                 if (unacceptedMatch > 0) {
-                    const acceptBtn = document.querySelector("#accept-match");
-                    fetch('/user/stop/queue');
-                    acceptBtn.addEventListener('onClick', () => {});
+                    const matchScreen = document.querySelector("#match-found-screen");
+                    matchScreen.classList.remove("hidden");
+                    matchScreen.classList.remove("flex");
+                    await fetch('/user/stop/queue');
                     return;
                 }
 
@@ -79,16 +88,17 @@
         setInterval(loadQueue, 1000);
 
         function startTimer() {
-            if (!_isQueueing)
-                return;
-
-            const el = document.getElementById("queue-time");
-            const queuedAt = el.getAttribute("data-queued-at");
-
             // Parse into JS Date
-            const dateQueued = new Date(queuedAt.replace(" ", "T")); // safer for ISO parsing
 
-            function update() {
+            async function update() {
+                if (!_isQueueing)
+                    return;
+
+                var queuedAt = await fetch("user/queue/queuedAt");
+                queuedAt = await queuedAt.json();
+
+                const dateQueued = new Date(queuedAt.replace(" ", "T")); // safer for ISO parsing
+            
                 const timeZone = "Europe/Paris";
 
                 // Force both times into CET
@@ -108,7 +118,7 @@
                 const minutes = Math.floor(diffSec / 60);
                 const seconds = diffSec % 60;
 
-                el.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+                queueTimeEl.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
             }
 
 

@@ -11,12 +11,15 @@ use Illuminate\Support\Facades\Auth;
 
 class UnacceptedMatchController extends Controller
 {
-    public function getEntries(string $id)
+    public function getEntries()
     {
-        return DB::table('unaccepted_matches')
+        $id = Auth::id();
+        $entries = DB::table('unaccepted_matches')
             ->where('user_id_1', '=', $id)
             ->orWhere('user_id_2', '=', $id)
-            ->count('id') ?? 0;
+            ->first();
+        
+        return response()->json($entries);
     }
 
     public function createMatch(Request $request)

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User as User;
 use App\Models\Queue as Queue;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class QueueController extends Controller
@@ -13,27 +14,46 @@ class QueueController extends Controller
     public static function isQueueing()
     {
         $user = User::find(Auth::id());
-        return $user->queue()->exists();
+        return response()->json($user->queue()->exists());
     }
 
-    public static function userQueuedAt(int $id)
+    public static function userQueuedAt()
     {
         $user = User::find(Auth::id());
 
         if ($user->queue()->exists())
-            return $user->queue->created_at;
+            return response()->json($user->queue()->created_at);
+
+        return response(null, 500);
     }
 
     public function queueStart()
     {
-        $user = User::find(Auth::user()->id);
-        $user->tryStartQueue();
+        try
+        {
+            $user = User::find(Auth::id());
+            $user->tryStartQueue();
+            return response();
+        }
+        catch (Exception $e)
+        {
+            return response($e, 500);
+        }
     }
 
     public function queueStop()
     {
-        $user = User::find(Auth::user()->id);
-        $user->tryStopQueue();
+        try
+        {
+
+            $user = User::find(Auth::id());
+            $user->tryStopQueue();
+            return response();
+        }
+        catch (Exception $e)
+        {
+            return response($e, 500);
+        }
     }
 
     // app/Http/Controllers/QueueController.php
