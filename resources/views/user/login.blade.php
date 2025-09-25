@@ -1,7 +1,4 @@
 <x-base-page>
-    @section('users_online')
-    {{ $users_online }}
-    @endsection
     <form class="w-3/5 flex flex-col items-center" action="{{ route('login') }}" method="post">
         <h1 class="text-5xl font-bold text-[#666562]">Login</h1>
         @csrf
@@ -17,9 +14,9 @@
             <button type="submit" class="text-center text-[#F7F6ED] font-bold bg-[#519F66] drop-shadow-md p-8 py-2 w-3/6 rounded-full">LOGIN</button>
         </div>
         @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                <p class="text-red-600 mt-2">{{ $error }}</p>
-            @endforeach
+        @foreach ($errors->all() as $error)
+        <p class="text-red-600 mt-2">{{ $error }}</p>
+        @endforeach
         @endif
     </form>
 </x-base-page>

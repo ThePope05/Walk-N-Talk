@@ -2,43 +2,25 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QueueController;
+use App\Http\Controllers\UnacceptedMatchController;
 use App\Http\Controllers\WalkMatchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (Auth::user())
-        return view(
-            'welcome',
-            [
-                'userIsQueueing' => QueueController::userIsQueued(Auth::user()->id),
-                'queued_at' => QueueController::userQueuedAt(Auth::user()->id),
-                'users_online' => UserController::getUserCount()
-            ]
-        );
-
-    return view('welcome',
-        [
-            'users_online' => UserController::getUserCount()
-        ]);
+    return view('welcome');
 })->name('welcome');
 
 
 // LOGIN ROUTES
 Route::get('user/login', function () {
-    return view('user/login',
-        [
-            'users_online' => UserController::getUserCount()
-        ]);
+    return view('user/login');
 })->name('login');
 Route::post('user/login', [UserController::class, 'loginUser'])->name('login');
 
 // REGISTER ROUTES
 Route::get('user/register', function () {
-    return view('user/register',
-        [
-            'users_online' => UserController::getUserCount()
-        ]);
+    return view('user/register');
 })->name('register');
 Route::post('user/register', [UserController::class, 'registerUser'])->name('register');
 
@@ -49,12 +31,16 @@ Route::get('user/logout', function () {
     return redirect('/');
 })->name('logout');
 
-// QUEUE ROUTES
+// API ENDPOINTS
+Route::get('/queue/entries', [QueueController::class, 'getEntries']);
+Route::get('/unacceptedMatch/entries/{id}', [UnacceptedMatchController::class, 'getEntries']);
+
 Route::get('user/queue/start', [QueueController::class, 'queueStart'])->middleware('auth')->name('queue.start');
 Route::get('user/queue/stop', [QueueController::class, 'queueStop'])->middleware('auth')->name('queue.stop');
+Route::get('user/queue/isQueueing', [QueueController::class, 'isQueueing'])->middleware('auth')->name('user.isQueueing');
+Route::get('user/queue/queuedAt', [QueueController::class, 'userQueuedAt'])->middleware('auth')->name('user.queuedAt');
 
-// GET ENTRIES JSON
-Route::get('/queue/entries', [QueueController::class, 'getEntries']);
+Route::get('/user/online_count', [UserController::class, 'getUserCount']);
 
 // START MATCH 
 Route::post('/walkMatch', [WalkMatchController::class, 'createMatch']);

@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class QueueController extends Controller
 {
-    public static function userIsQueued(int $id)
+    public static function isQueueing()
     {
-        $user = User::find($id);
+        $user = User::find(Auth::id());
         return $user->queue()->exists();
     }
 
     public static function userQueuedAt(int $id)
     {
-        $user = User::find($id);
+        $user = User::find(Auth::id());
 
         if ($user->queue()->exists())
             return $user->queue->created_at;
@@ -28,14 +28,12 @@ class QueueController extends Controller
     {
         $user = User::find(Auth::user()->id);
         $user->tryStartQueue();
-        return redirect(route('welcome'));
     }
 
     public function queueStop()
     {
         $user = User::find(Auth::user()->id);
         $user->tryStopQueue();
-        return redirect(route('welcome'));
     }
 
     // app/Http/Controllers/QueueController.php

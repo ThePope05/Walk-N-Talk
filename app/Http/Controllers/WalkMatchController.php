@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\WalkMatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class WalkMatchController extends Controller
 {
@@ -21,10 +22,7 @@ class WalkMatchController extends Controller
         $walkMatch = new WalkMatch();
         $walkMatch->user_id_1 = $user1->id;
         $walkMatch->user_id_2 = $user2->id;
-        $walkMatch->completed = false;
 
         $walkMatch->save();
-
-        return redirect(route('/'));
     }
 }
