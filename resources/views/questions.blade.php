@@ -1,7 +1,7 @@
 <x-base-page>
     <div id="question-list">
 
-        <h1>{{ ucfirst($category) }} vragen</h1>
+        <h1 class="lalezar">{{ ucfirst($category) }} vragen</h1>
         
         <ul>
             @forelse($questions as $question)

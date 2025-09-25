@@ -10,7 +10,7 @@ class QuestionController extends Controller
     public function show($category)
     {
         $questions = match($category) {
-            'icebreakers' => [
+            'Icebreaker' => [
                 'Wat is je favoriete seizoen en waarom?',
                 'Welke app gebruik je het meest op je telefoon?',
                 'Wat zou je doen als je de loterij wint?',
@@ -42,7 +42,7 @@ class QuestionController extends Controller
                 'Als je een boek of film mocht herschrijven, welke zou dat zijn?',
                 'Wat is een kleine dagelijkse gewoonte waar je blij van wordt?'
             ],
-            'deeptalk' => [
+            'Deep talk' => [
                 'Wat is een ervaring die je leven voorgoed heeft veranderd?',
                 'Waar ben je het meest trots op in je leven?',
                 'Wat betekent geluk voor jou?',
@@ -74,7 +74,7 @@ class QuestionController extends Controller
                 'Wat is iets dat je diep inspireert?',
                 'Hoe definieer je innerlijke rust of tevredenheid?'
             ],
-            'jokes' => [
+            'Joke hour' => [
                 'Als je een dier kon zijn voor een dag, welk dier zou je kiezen en waarom?',
                 'Wat is de meest belachelijke gewoonte die je hebt?',
                 'Welke foute hit zing je stiekem altijd mee?',
