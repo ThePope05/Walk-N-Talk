@@ -4,6 +4,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\WalkController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,3 +32,10 @@ Route::name('user.')->group(function() {
 
 Route::get('/questions/{category}', [QuestionController::class, 'show'])
     ->name('questions.show');
+
+Route::post('/walk/end', [App\Http\Controllers\WalkController::class, 'end'])->name('walk.end');
+
+Route::post('/walk/end', function () {
+    return redirect()->route('walk.index')->with('status', 'Wandeling beëindigd');
+})->name('walk.end');
+

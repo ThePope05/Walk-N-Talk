@@ -58,3 +58,53 @@ h1{
     font-family: 'Lalezar', sans-serif;
 }
 
+/* overlay achtergrond */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+/* popup box */
+.popup {
+  background: #fff9e6;
+  padding: 24px;
+  border-radius: 12px;
+  width: 320px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  text-align: center;
+  position: relative;
+}
+
+/* sluit-icoon */
+.popup .close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* knoppen in popup */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn.cancel {
+  background: #ccc;
+  color: #000;
+}
+
+.btn.confirm {
+  background: #3fa75b;
+  color: #fff;
+  font-weight: bold;
+}
