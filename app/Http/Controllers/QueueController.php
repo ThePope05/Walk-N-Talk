@@ -21,37 +21,30 @@ class QueueController extends Controller
     {
         $user = User::find(Auth::id());
 
-        if ($user->queue()->exists())
-            return response()->json($user->queue()->created_at);
-
-        return response(null, 500);
+        if ($user->queue()->exists()) {
+            $time_stamp = $user->queue->created_at;
+            return response()->json($time_stamp);
+        }
     }
 
-    public function queueStart()
+    public static function queueStart()
     {
-        try
-        {
+        try {
             $user = User::find(Auth::id());
             $user->tryStartQueue();
             return response();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             return response($e, 500);
         }
     }
 
-    public function queueStop()
+    public static function queueStop()
     {
-        try
-        {
-
+        try {
             $user = User::find(Auth::id());
             $user->tryStopQueue();
             return response();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             return response($e, 500);
         }
     }

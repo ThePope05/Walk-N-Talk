@@ -26,14 +26,14 @@
 
         async function toggleQueueing() {
             if (await isQueueing()) {
-                await fetch("/user/queue/stop");
+                await fetch("user/queue/stop");
                 queueTimeEl.classList.add("hidden");
                 queueImgEl.classList.remove("hidden");
                 queueImgEl.classList.add("flex");
                 queueTimeEl.textContent = "00:00";
                 _isQueueing = false;
             } else {
-                await fetch("/user/queue/start");
+                await fetch("user/queue/start");
                 queueTimeEl.classList.remove("hidden");
                 queueImgEl.classList.add("hidden");
                 queueImgEl.classList.remove("flex");
@@ -42,7 +42,7 @@
         }
 
         async function isQueueing() {
-            try{
+            try {
                 var data = await fetch('user/queue/isQueueing');
                 var isQueueing = await data.json();
                 _isQueueing = isQueueing;
@@ -58,7 +58,7 @@
                 return;
 
             try {
-                var unacceptedMatch = await fetch('/unacceptedMatch/entries');
+                var unacceptedMatch = await fetch('/user/unacceptedMatch');
                 unacceptedMatch = await unacceptedMatch.json();
 
                 console.log(unacceptedMatch);
@@ -67,7 +67,7 @@
                     const matchScreen = document.querySelector("#match-found-screen");
                     matchScreen.classList.remove("hidden");
                     matchScreen.classList.remove("flex");
-                    await fetch('/user/stop/queue');
+                    toggleQueueing();
                     return;
                 }
 
@@ -98,7 +98,7 @@
                 queuedAt = await queuedAt.json();
 
                 const dateQueued = new Date(queuedAt.replace(" ", "T")); // safer for ISO parsing
-            
+
                 const timeZone = "Europe/Paris";
 
                 // Force both times into CET
@@ -132,7 +132,7 @@
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             console.log("Starting match between current user and " + _otherUserId);
-            fetch("/walkMatch", {
+            fetch("/unacceptedMatch", {
                 method: "POST",
                 body: JSON.stringify({
                     otherUserId: _otherUserId

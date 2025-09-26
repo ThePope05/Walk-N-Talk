@@ -90,20 +90,28 @@ class User extends Authenticatable
     {
         return $this->walkMatchesAsUser1->merge($this->walkMatchesAsUser2);
     }
-    
-    public function unacceptedMatchAsUser1(): HasMany
+
+    public function unacceptedMatchAsUser1(): HasOne
     {
-        return $this->hasMany(UnacceptedMatch::class, 'user_id_1');
+        return $this->hasOne(UnacceptedMatch::class, 'user_id_1');
     }
 
-    public function unacceptedMatchAsUser2(): HasMany
+    public function unacceptedMatchAsUser2(): HasOne
     {
-        return $this->hasMany(UnacceptedMatch::class, 'user_id_2');
+        return $this->hasOne(UnacceptedMatch::class, 'user_id_2');
     }
 
-    public function unacceptedMatches()
+    public function unacceptedMatch(): ?object
     {
-        return $this->unacceptedMatchAsUser1->merge($this->unacceptedMatchAsUser2);
+        $unacceptedMatchAsUser1 = $this->unacceptedMatchAsUser1()->first();
+        if (!is_null($unacceptedMatchAsUser1))
+            return $unacceptedMatchAsUser1;
+
+        $unacceptedMatchAsUser2 = $this->unacceptedMatchAsUser2()->first();
+        if (!is_null($unacceptedMatchAsUser2))
+            return $unacceptedMatchAsUser2;
+
+        return null;
     }
 
     public function tryStartQueue()

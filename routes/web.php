@@ -33,7 +33,7 @@ Route::get('user/logout', function () {
 
 // API ENDPOINTS
 Route::get('/queue/entries', [QueueController::class, 'getEntries']);
-Route::get('/unacceptedMatch/entries', [UnacceptedMatchController::class, 'getEntries']);
+Route::get('/user/unacceptedMatch', [UnacceptedMatchController::class, 'userHasMatch']);
 
 Route::get('user/queue/start', [QueueController::class, 'queueStart'])->middleware('auth')->name('queue.start');
 Route::get('user/queue/stop', [QueueController::class, 'queueStop'])->middleware('auth')->name('queue.stop');
@@ -44,3 +44,4 @@ Route::get('/user/online_count', [UserController::class, 'getUserCount']);
 
 // START MATCH 
 Route::post('/walkMatch', [WalkMatchController::class, 'createMatch']);
+Route::post('/unacceptedMatch', [UnacceptedMatchController::class, 'createMatch']);

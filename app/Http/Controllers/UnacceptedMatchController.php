@@ -18,8 +18,22 @@ class UnacceptedMatchController extends Controller
             ->where('user_id_1', '=', $id)
             ->orWhere('user_id_2', '=', $id)
             ->first();
-        
+
         return response()->json($entries);
+    }
+
+    public function userHasMatch()
+    {
+        $user = User::find(Auth::id());
+        $walkMatch1 = $user->unacceptedMatchAsUser1;
+        if ($walkMatch1->exists())
+            return response()->json($walkMatch1);
+
+        $walkMatch2 = $user->unacceptedMatchAsUser2;
+        if ($walkMatch2->exists())
+            return response()->json($walkMatch2);
+
+        return response();
     }
 
     public function createMatch(Request $request)
