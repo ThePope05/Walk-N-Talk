@@ -50,8 +50,12 @@ Route::post('/walkMatch', [WalkMatchController::class, 'createMatch']);
 
 // MATCH PAGE
 Route::get('/match', function () {
-    return view('matchPage');
+    return view('match-page');
 })->name('match');
+
+Route::get('/ice-breakers', function () {
+    return view('ice-breakers');
+})->name('ice-breakers');
 
 Route::get('/questions/{category}', [QuestionController::class, 'show'])
     ->name('questions.show');
