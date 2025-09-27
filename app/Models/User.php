@@ -125,20 +125,18 @@ class User extends Authenticatable
     public function tryStartQueue()
     {
         if ($this->queue()->exists())
-            return false;
+            return;
 
         $this->queue()->create([
             'user_id' => Auth::id()
         ]);
-        return true;
     }
 
     public function tryStopQueue()
     {
         if (!$this->queue()->exists())
-            return false;
+            return;
 
         $this->queue()->delete();
-        return true;
     }
 }

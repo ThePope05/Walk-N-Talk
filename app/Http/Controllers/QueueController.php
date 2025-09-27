@@ -29,24 +29,14 @@ class QueueController extends Controller
 
     public static function queueStart()
     {
-        try {
-            $user = User::find(Auth::id());
-            $user->tryStartQueue();
-            return response();
-        } catch (Exception $e) {
-            return response($e, 500);
-        }
+        $user = User::find(Auth::id());
+        $user->tryStartQueue();
     }
 
     public static function queueStop()
     {
-        try {
-            $user = User::find(Auth::id());
-            $user->tryStopQueue();
-            return response();
-        } catch (Exception $e) {
-            return response($e, 500);
-        }
+        $user = User::find(Auth::id());
+        $user->tryStopQueue();
     }
 
     // app/Http/Controllers/QueueController.php

@@ -18,8 +18,7 @@ class WalkMatchController extends Controller
         $id2 = $request->input('otherUserId');
 
         // sort id's
-        if ($id1 > $id2)
-        {
+        if ($id1 > $id2) {
             $tmpId2 = $id2;
             $id2 = $id1;
             $id1 = $tmpId2;
@@ -62,7 +61,7 @@ class WalkMatchController extends Controller
             ->where('completed', false)
             ->first();
 
-        return !is_null($existingMatch);
+        return response()->json(!is_null($existingMatch));
     }
 
     public function finishWalk()

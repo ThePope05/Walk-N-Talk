@@ -20,127 +20,76 @@
     @endauth
     <script>
         var _isQueueing = false;
+        var _queuedAt = null;
         const userId = document.querySelector("#userId").innerHTML;
         const queueImgEl = document.querySelector("#queue-img");
         const queueTimeEl = document.querySelector("#queue-time");
 
         async function toggleQueueing() {
-            if (await isQueueing()) {
-                await fetch("user/queue/stop");
-                queueTimeEl.classList.add("hidden");
-                queueImgEl.classList.remove("hidden");
-                queueImgEl.classList.add("flex");
-                _isQueueing = false;
+            await isQueueing();
+            if (_isQueueing) {
+                await fetch("user/queue/stop")
+                    .then(function(repsonse) {
+                        if (!repsonse.ok) return;
+
+                        queueTimeEl.classList.add("hidden");
+                        queueImgEl.classList.remove("hidden");
+                        queueImgEl.classList.add("flex");
+                        _isQueueing = false;
+                    });
             } else {
-                await fetch("user/queue/start");
-                queueTimeEl.classList.remove("hidden");
-                queueImgEl.classList.add("hidden");
-                queueImgEl.classList.remove("flex");
-                _isQueueing = true;
+                await fetch("user/queue/start")
+                    .then(function(repsonse) {
+                        if (!repsonse.ok) return;
+
+                        queueTimeEl.classList.remove("hidden");
+                        queueImgEl.classList.add("hidden");
+                        queueImgEl.classList.remove("flex");
+                        _queuedAt = new Date();
+                        _isQueueing = true;
+                    });
             }
         }
 
         async function isQueueing() {
             try {
-                var data = await fetch('user/queue/isQueueing');
-                var isQueueing = await data.json();
-                _isQueueing = isQueueing;
-                return isQueueing;
+                fetch('user/queue/isQueueing')
+                    .then(async function(response) {
+                        if (!response.ok) return;
+                        _isQueueing = await response.json();
+                    })
             } catch (e) {
                 console.error(e);
             }
         }
 
-        // TODO: move the start/stop queue to an api request too. 
-        async function loadQueue() {
-            if (!(await isQueueing()))
-            {
-                var hasUnfinishedWalk = await fetch('/user/hasUnfinishedWalk');
-                hasUnfinishedWalk = await hasUnfinishedWalk.json();
 
-                console.log(hasUnfinishedWalk);
+        function update() {
+            isQueueing();
 
-                if (hasUnfinishedWalk) {
-                    window.open('/match', '_self');
-                    return;
-                }
-                return;
-            }
+            if (_queuedAt == null || !_isQueueing) return;
 
-            try {
-                var queueEntries = await fetch('/queue/entries');
-                queueEntries = await queueEntries.json();
+            const now = new Date();
+            const diffSec = Math.floor((now - _queuedAt) / 1000);
+            const minutes = Math.floor(diffSec / 60);
+            const seconds = diffSec % 60;
+            queueTimeEl.textContent = `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+            checkMatchMade();
+        }
 
-                console.log(queueEntries);
 
-                queueEntries.forEach(queueEntry => {
-                    createMatch(queueEntry.user_id);
-                    window.open('/match', '_self');
-                    return;
+        update(); // run immediately
+        setInterval(update, 1000); // then every second
+
+        async function checkMatchMade() {
+            fetch('/user/hasUnfinishedWalk')
+                .then(async function(response) {
+                    if (!response.ok) return;
+
+                    var hasUnfinishedWalk = await response.json();
+                    if (hasUnfinishedWalk)
+                        window.open('/match', '_self');
                 });
-            } catch (e) {
-                console.error("Error fetching queue: ", e);
-            }
-        }
-
-        loadQueue();
-        setInterval(loadQueue, 1000);
-
-        function startTimer() {
-            // Parse into JS Date
-
-            async function update() {
-                if (!_isQueueing)
-                    return;
-
-                var queuedAt = await fetch("user/queue/queuedAt");
-                queuedAt = await queuedAt.json();
-
-                const dateQueued = new Date(queuedAt.replace(" ", "T")); // safer for ISO parsing
-
-                const timeZone = "Europe/Paris";
-
-                // Force both times into CET
-                const now = new Date(
-                    new Date().toLocaleString("en-US", {
-                        timeZone
-                    })
-                );
-                const queued = new Date(
-                    dateQueued.toLocaleString("en-US", {
-                        timeZone
-                    })
-                );
-
-                const diffSec = Math.floor((now - queued) / 1000);
-
-                const minutes = Math.floor(diffSec / 60);
-                const seconds = diffSec % 60;
-
-                queueTimeEl.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-            }
-
-
-            update(); // run immediately
-            setInterval(update, 1000); // then every second
-        }
-
-        startTimer();
-
-        async function createMatch(_otherUserId) {
-            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            console.log("Starting match between current user and " + _otherUserId);
-            await fetch("/walkMatch", {
-                method: "POST",
-                body: JSON.stringify({
-                    otherUserId: _otherUserId
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    "X-CSRF-TOKEN": token
-                }
-            });
         }
     </script>
 </x-base-page>
