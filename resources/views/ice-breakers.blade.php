@@ -12,7 +12,7 @@
             <span class="close" onclick="closePopup()">&times;</span>
             <h2 class="text-2xl font-bold text-center font-lalezar">Wandeling beëindigen</h2>
             <div class="actions">
-                <a class="w-3/5 rounded-2xl bg-[#519F66] text-[#F8F6EF] text-center mt-4 text-2xl py-2" href="{{ route('ice-breakers') }}">Beëindig</a>
+                <a class="w-3/5 rounded-2xl bg-[#519F66] text-[#F8F6EF] text-center mt-4 text-2xl py-2" href="{{ route('walk.end') }}">Beëindig</a>
             </div>
         </div>
     </div>
