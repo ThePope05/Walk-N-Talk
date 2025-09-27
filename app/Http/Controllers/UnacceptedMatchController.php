@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UnacceptedMatch;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UnacceptedMatchController extends Controller
@@ -26,11 +26,11 @@ class UnacceptedMatchController extends Controller
     {
         $user = User::find(Auth::id());
         $walkMatch1 = $user->unacceptedMatchAsUser1;
-        if ($walkMatch1->exists())
+        if (is_null($walkMatch1))
             return response()->json($walkMatch1);
 
         $walkMatch2 = $user->unacceptedMatchAsUser2;
-        if ($walkMatch2->exists())
+        if (is_null($walkMatch2))
             return response()->json($walkMatch2);
 
         return response();

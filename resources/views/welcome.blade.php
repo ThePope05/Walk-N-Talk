@@ -4,7 +4,7 @@
     <div class="bg-white shadow-custom-lg rounded-full h-96 w-96 flex justify-center items-center">
         <button id="QueueButton" onclick="toggleQueueing()" class="bg-[#519F66] cursor-pointer rounded-full w-[250px] h-[250px] flex justify-center items-center">
             <meta name="csrf-token" content="{{ csrf_token() }}" />
-            <p id="queue-time" class="w-3/4 text-4xl text-center hidden font-black text-[#F8F6EF]"></p>
+            <p id="queue-time" class="w-3/4 text-4xl text-center hidden font-black text-[#F8F6EF]">00:00</p>
 
             <img id="queue-img" src="{{ asset('/img/WalkNTalk.png') }}" class="w-3/4" alt="WalkNTalk">
         </button>
@@ -30,7 +30,6 @@
                 queueTimeEl.classList.add("hidden");
                 queueImgEl.classList.remove("hidden");
                 queueImgEl.classList.add("flex");
-                queueTimeEl.textContent = "00:00";
                 _isQueueing = false;
             } else {
                 await fetch("user/queue/start");
@@ -55,22 +54,20 @@
         // TODO: move the start/stop queue to an api request too. 
         async function loadQueue() {
             if (!(await isQueueing()))
-                return;
+            {
+                var hasUnfinishedWalk = await fetch('/user/hasUnfinishedWalk');
+                hasUnfinishedWalk = await hasUnfinishedWalk.json();
 
-            try {
-                var unacceptedMatch = await fetch('/user/unacceptedMatch');
-                unacceptedMatch = await unacceptedMatch.json();
+                console.log(hasUnfinishedWalk);
 
-                console.log(unacceptedMatch);
-
-                if (unacceptedMatch > 0) {
-                    const matchScreen = document.querySelector("#match-found-screen");
-                    matchScreen.classList.remove("hidden");
-                    matchScreen.classList.remove("flex");
-                    toggleQueueing();
+                if (hasUnfinishedWalk) {
+                    window.open('/match', '_self');
                     return;
                 }
+                return;
+            }
 
+            try {
                 var queueEntries = await fetch('/queue/entries');
                 queueEntries = await queueEntries.json();
 
@@ -78,6 +75,8 @@
 
                 queueEntries.forEach(queueEntry => {
                     createMatch(queueEntry.user_id);
+                    window.open('/match', '_self');
+                    return;
                 });
             } catch (e) {
                 console.error("Error fetching queue: ", e);
@@ -128,11 +127,11 @@
 
         startTimer();
 
-        function createMatch(_otherUserId) {
+        async function createMatch(_otherUserId) {
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             console.log("Starting match between current user and " + _otherUserId);
-            fetch("/unacceptedMatch", {
+            await fetch("/walkMatch", {
                 method: "POST",
                 body: JSON.stringify({
                     otherUserId: _otherUserId
@@ -143,16 +142,5 @@
                 }
             });
         }
-
-        const eventSource = new EventSource("/events");
-
-        eventSource.onmessage = (e) => {
-            if (isQueueing())
-                return;
-            const data = JSON.parse(e.data);
-            if (data.url) {
-                window.location.href = data.url;
-            }
-        };
     </script>
 </x-base-page>

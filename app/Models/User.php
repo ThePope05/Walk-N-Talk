@@ -86,9 +86,17 @@ class User extends Authenticatable
         return $this->hasMany(WalkMatch::class, 'user_id_2');
     }
 
-    public function walkMatches()
+    public function walkMatch()
     {
-        return $this->walkMatchesAsUser1->merge($this->walkMatchesAsUser2);
+        $walkMatchAsUser1 = $this->walkMatchesAsUser1()->first();
+        if (!is_null($walkMatchAsUser1))
+            return $walkMatchAsUser1;
+
+        $walkMatchAsUser2 = $this->walkMatchesAsUser2()->first();
+        if (!is_null($walkMatchAsUser2))
+            return $walkMatchAsUser2;
+
+        return null;
     }
 
     public function unacceptedMatchAsUser1(): HasOne
