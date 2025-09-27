@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -95,29 +94,6 @@ class User extends Authenticatable
         $walkMatchAsUser2 = $this->walkMatchesAsUser2()->first();
         if (!is_null($walkMatchAsUser2))
             return $walkMatchAsUser2;
-
-        return null;
-    }
-
-    public function unacceptedMatchAsUser1(): HasOne
-    {
-        return $this->hasOne(UnacceptedMatch::class, 'user_id_1');
-    }
-
-    public function unacceptedMatchAsUser2(): HasOne
-    {
-        return $this->hasOne(UnacceptedMatch::class, 'user_id_2');
-    }
-
-    public function unacceptedMatch(): ?object
-    {
-        $unacceptedMatchAsUser1 = $this->unacceptedMatchAsUser1()->first();
-        if (!is_null($unacceptedMatchAsUser1))
-            return $unacceptedMatchAsUser1;
-
-        $unacceptedMatchAsUser2 = $this->unacceptedMatchAsUser2()->first();
-        if (!is_null($unacceptedMatchAsUser2))
-            return $unacceptedMatchAsUser2;
 
         return null;
     }
