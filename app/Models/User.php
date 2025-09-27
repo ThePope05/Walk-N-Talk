@@ -4,10 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -65,5 +68,51 @@ class User extends Authenticatable
         $user->save();
 
         return redirect(route('user.login'));
+    }
+
+    public function queue(): HasOne
+    {
+        return $this->hasOne(Queue::class);
+    }
+
+    public function walkMatchesAsUser1(): HasMany
+    {
+        return $this->hasMany(WalkMatch::class, 'user_id_1');
+    }
+
+    public function walkMatchesAsUser2(): HasMany
+    {
+        return $this->hasMany(WalkMatch::class, 'user_id_2');
+    }
+
+    public function walkMatch()
+    {
+        $walkMatchAsUser1 = $this->walkMatchesAsUser1()->first();
+        if (!is_null($walkMatchAsUser1))
+            return $walkMatchAsUser1;
+
+        $walkMatchAsUser2 = $this->walkMatchesAsUser2()->first();
+        if (!is_null($walkMatchAsUser2))
+            return $walkMatchAsUser2;
+
+        return null;
+    }
+
+    public function tryStartQueue()
+    {
+        if ($this->queue()->exists())
+            return;
+
+        $this->queue()->create([
+            'user_id' => Auth::id()
+        ]);
+    }
+
+    public function tryStopQueue()
+    {
+        if (!$this->queue()->exists())
+            return;
+
+        $this->queue()->delete();
     }
 }
