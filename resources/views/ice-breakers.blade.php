@@ -3,6 +3,7 @@
         <a href="{{ route('questions.show', 'Icebreaker') }}" class="btn">Ice breakers!</a>
         <a href="{{ route('questions.show', 'Deep talk') }}" class="btn">Deep talk</a>
         <a href="{{ route('questions.show', 'Joke hour') }}" class="btn">Joke hour</a>
+        <div class="bg-[#F0E6C2] rounded-2xl w-full py-2"></div>
         <a href="#" class="btn end-walk" onclick="openPopup(event)">Beëindig wandeling</a>
     </div>
 
