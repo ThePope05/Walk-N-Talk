@@ -81,7 +81,7 @@ class RunMatchmaker extends Command
 
                 $walkMatch->save();
 
-                echo "Made match...";
+                echo "Made match... \n";
             }
         });
     }
