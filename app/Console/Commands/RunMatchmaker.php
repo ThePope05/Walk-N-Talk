@@ -24,7 +24,7 @@ class RunMatchmaker extends Command
     protected $description = 'Command description';
     public function handle()
     {
-        echo "Daemon running...";
+        echo "Daemon running...\n";
         // Keep looping if you want a long-running worker
         while (true) {
             echo $this->runMatchmakerCycle();
