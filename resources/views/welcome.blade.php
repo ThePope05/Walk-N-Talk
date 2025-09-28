@@ -1,8 +1,8 @@
 <x-base-page>
     @auth
     <span class="hidden" id="userId">{{ auth()->id() }}</span>
-    <div class="bg-white shadow-custom-lg rounded-full h-96 w-96 flex justify-center items-center">
-        <button id="QueueButton" onclick="toggleQueueing()" class="bg-[#519F66] cursor-pointer rounded-full w-[250px] h-[250px] flex justify-center items-center">
+    <div class="bg-white shadow-custom-lg rounded-full w-96 max-sm:w-3/4 aspect-square flex justify-center items-center">
+        <button id="QueueButton" onclick="toggleQueueing()" class="bg-[#519F66] cursor-pointer rounded-full w-3/4 aspect-square flex justify-center items-center">
             <meta name="csrf-token" content="{{ csrf_token() }}" />
             <p id="queue-time" class="w-3/4 text-4xl text-center hidden font-black text-[#F8F6EF]">00:00</p>
 

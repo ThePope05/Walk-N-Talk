@@ -22,15 +22,15 @@
 </head>
 
 <body class=" min-h-svh bg-[#F7F6ED]">
-    <header class="absolute top-0 left-0 flex items-center justify-center w-screen h-36 bg-[#F0E6C2]">
+    <header class="absolute top-0 left-0 flex items-center justify-center max-sm:justify-start w-screen h-36 bg-[#F0E6C2]">
         <a href="{{ route('welcome') }}" class=" h-3/4">
             <img src="{{ asset('/img/Logo.png') }}" class="bg-cover h-full">
         </a>
-        <div class="absolute bottom-0 flex items-center justify-center">
+        <div class="absolute bottom-0 w-full flex items-center justify-center">
             <div class="bg-[#519F66] w-1 h-1 rounded-full mr-1"></div>
             <p id="users-online" class="text-[#152B38] text-center font-lalezar">online gebruikers tellen...</p>
         </div>
-        <div class="absolute flex right-2 px-5 items-center justify-center bg-[#F7F6ED] p-2 rounded-full">
+        <div class="absolute flex right-2  max-sm:top-2 px-5 items-center justify-center bg-[#F7F6ED] p-2 rounded-full">
             @if (!Auth::check())
             <a href="{{ route('login'); }}" class="mr-3">
                 <span class="material-symbols-outlined">
