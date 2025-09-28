@@ -13,6 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('walk_matches', function (Blueprint $table) {
+            $table->id();
             $table->foreignIdFor(User::class, 'user_id_1');
             $table->foreignIdFor(User::class, 'user_id_2');
             $table->boolean('completed')->default(false);

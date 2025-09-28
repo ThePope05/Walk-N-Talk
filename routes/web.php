@@ -2,12 +2,10 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QueueController;
-use App\Http\Controllers\UnacceptedMatchController;
 use App\Http\Controllers\WalkMatchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\WalkController;
 
 
 Route::get('/', function () {
@@ -46,22 +44,17 @@ Route::get('user/queue/queuedAt', [QueueController::class, 'userQueuedAt'])->mid
 Route::get('/user/online_count', [UserController::class, 'getUserCount']);
 
 // START MATCH 
-Route::post('/walkMatch', [WalkMatchController::class, 'createMatch']);
+Route::post('/walkMatch', [WalkMatchController::class, 'createMatch'])->middleware('auth');
 
 // MATCH PAGE
-Route::get('/match', function () {
-    return view('match-page');
-})->name('match');
+Route::get('/match', [WalkMatchController::class, 'matchPage'])->middleware('hasMatch')->name('match');
 
 Route::get('/ice-breakers', function () {
     return view('ice-breakers');
-})->name('ice-breakers');
+})->middleware('hasMatch')->name('ice-breakers');
 
 Route::get('/questions/{category}', [QuestionController::class, 'show'])
+    ->middleware('hasMatch')
     ->name('questions.show');
 
-Route::post('/walk/end', [App\Http\Controllers\WalkController::class, 'end'])->name('walk.end');
-
-Route::post('/walk/end', function () {
-    return redirect()->route('walk.index')->with('status', 'Wandeling beëindigd');
-})->name('walk.end');
+Route::get('/walk/end', [WalkMatchController::class, 'finishWalk'])->middleware('auth')->name('walk.end');
