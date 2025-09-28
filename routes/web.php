@@ -44,18 +44,19 @@ Route::get('user/queue/queuedAt', [QueueController::class, 'userQueuedAt'])->mid
 Route::get('/user/online_count', [UserController::class, 'getUserCount']);
 
 // START MATCH 
-Route::post('/walkMatch', [WalkMatchController::class, 'createMatch']);
+Route::post('/walkMatch', [WalkMatchController::class, 'createMatch'])->middleware('auth');
 
 // MATCH PAGE
 Route::get('/match', function () {
     return view('match-page');
-})->name('match');
+})->middleware('hasMatch')->name('match');
 
 Route::get('/ice-breakers', function () {
     return view('ice-breakers');
-})->name('ice-breakers');
+})->middleware('hasMatch')->name('ice-breakers');
 
 Route::get('/questions/{category}', [QuestionController::class, 'show'])
+    ->middleware('hasMatch')
     ->name('questions.show');
 
-Route::get('/walk/end', [WalkMatchController::class, 'finishWalk'])->name('walk.end');
+Route::get('/walk/end', [WalkMatchController::class, 'finishWalk'])->middleware('auth')->name('walk.end');
