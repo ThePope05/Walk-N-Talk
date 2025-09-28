@@ -47,9 +47,7 @@ Route::get('/user/online_count', [UserController::class, 'getUserCount']);
 Route::post('/walkMatch', [WalkMatchController::class, 'createMatch'])->middleware('auth');
 
 // MATCH PAGE
-Route::get('/match', function () {
-    return view('match-page');
-})->middleware('hasMatch')->name('match');
+Route::get('/match', [WalkMatchController::class, 'matchPage'])->middleware('hasMatch')->name('match');
 
 Route::get('/ice-breakers', function () {
     return view('ice-breakers');

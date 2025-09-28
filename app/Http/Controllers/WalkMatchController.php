@@ -82,4 +82,20 @@ class WalkMatchController extends Controller
 
         return redirect('/');
     }
+
+    public function matchPage()
+    {
+        $match = WalkMatch::where(function ($query) {
+            $query->where('user_id_1', Auth::id())
+                ->orWhere('user_id_2', Auth::id());
+        })
+            ->where('completed', false)
+            ->with(['user1', 'user2'])
+            ->first();
+
+        if (is_null($match))
+            return redirect('/');
+
+        return view('match-page', ['match' => $match]);
+    }
 }
