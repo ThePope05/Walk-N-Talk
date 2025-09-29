@@ -1,6 +1,6 @@
 <x-base-page>
     <form class="w-3/5 flex flex-col items-center" action="{{ route('user.login') }}" method="post">
-        <h1 class="text-5xl font-bold text-[#666562]">Login</h1>
+        <h1 class="text-5xl font-bold text-center w-full text-[#666562]">Login</h1>
         @csrf
         <div class="flex flex-col mt-3 w-full">
             <label for="email" class="">Email</label>

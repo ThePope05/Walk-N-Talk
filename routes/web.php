@@ -50,9 +50,12 @@ Route::put('user/profile', function (Request $request) {
         'firstName' => 'required|string|max:255',
         'lastName'  => 'required|string|max:255',
         'tribe'     => 'nullable|string|max:255',
-        'number'    => 'required|string|max:255',
+        'number'    => 'required|string|max:255|unique:users',
         'email'     => 'required|email|max:255|unique:users,email,' . $user->id,
     ]);
+    
+    if (!str_contains($request->input('email'), 'hu.nl'))
+        return redirect()->back()->withInput()->withErrors(['msg' => 'Must be a HU email']);
 
     $user->update($validated);
 
