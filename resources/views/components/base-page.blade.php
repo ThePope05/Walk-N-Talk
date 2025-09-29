@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'WalkNTalk') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -16,6 +16,7 @@
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <link rel="shortcut icon" href="{{ asset('/img/Logo_NoText.png') }}" type="image/x-icon">
 
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/css/manualStyling.css', 'resources/js/app.js', 'resources/js/user_count.js'])
