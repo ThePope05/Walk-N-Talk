@@ -49,7 +49,7 @@
                     logout
                 </span>
             </a>
-            <a href="">
+            <a href="{{ route('user.profile') }}">
                 <span class="material-symbols-outlined">
                     person
                 </span>

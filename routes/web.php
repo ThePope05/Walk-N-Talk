@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\WalkMatchController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
 
 
@@ -58,3 +59,27 @@ Route::get('/questions/{category}', [QuestionController::class, 'show'])
     ->name('questions.show');
 
 Route::get('/walk/end', [WalkMatchController::class, 'finishWalk'])->middleware('auth')->name('walk.end');
+
+Route::get('user/profile', function() { 
+    return view('user/profile');
+})->middleware('auth')->name('user.profile');
+
+// PUT: Update profiel
+Route::put('user/profile', function (Request $request) {
+    $user = Auth::user();
+
+    $validated = $request->validate([
+        'firstName' => 'required|string|max:255',
+        'lastName'  => 'required|string|max:255',
+        'tribe'     => 'nullable|string|max:255',
+        'number'    => 'required|string|max:255|unique:users,number,' . $user->id,
+        'email'     => 'required|email|max:255|unique:users,email,' . $user->id,
+    ]);
+    
+    if (!str_contains($request->input('email'), 'hu.nl'))
+        return redirect()->back()->withInput()->withErrors(['msg' => 'Must be a HU email']);
+
+    $user->update($validated);
+
+    return redirect()->route('user.profile')->with('success', 'Profiel succesvol bijgewerkt!');
+})->middleware('auth')->name('profile.update');
