@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\WalkMatchController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
 
 
@@ -63,8 +61,8 @@ Route::get('/questions/{category}', [QuestionController::class, 'show'])
 Route::get('/walk/end', [WalkMatchController::class, 'finishWalk'])->middleware('auth')->name('walk.end');
 
 Route::get('user/profile', function() { 
-    view('user.profile')->name('profile'); 
-})->middleware('auth');
+    return view('user/profile');
+})->middleware('auth')->name('user.profile');
 
 // PUT: Update profiel
 Route::put('user/profile', function (Request $request) {
@@ -74,7 +72,7 @@ Route::put('user/profile', function (Request $request) {
         'firstName' => 'required|string|max:255',
         'lastName'  => 'required|string|max:255',
         'tribe'     => 'nullable|string|max:255',
-        'number'    => 'required|string|max:255|unique:users',
+        'number'    => 'required|string|max:255|unique:users,number,' . $user->id,
         'email'     => 'required|email|max:255|unique:users,email,' . $user->id,
     ]);
     

@@ -1,6 +1,6 @@
 <x-base-page>
     <div class="w-3/5 flex flex-col items-center">        
-        <form action="{{ route('user.profile.update') }}" method="POST" class="w-3/5">
+        <form action="{{ route('profile.update') }}" method="POST" class="w-3/5">
             @csrf
             @method('PUT')
             
@@ -58,13 +58,7 @@
                     Opslaan
                 </button>
                 
-                <!-- Uitloggen formulier buiten update form, maar in dezelfde flex container -->
-                <form method="POST" action="{{ route('user.logout') }}">
-                    @csrf
-                    <button type="submit" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded">
-                        Uitloggen
-                    </button>
-                </form>
+                <a href="{{ route('logout') }}" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded">Uitloggen</a>
             </div>
         </form>
     </div>
