@@ -1,1 +1,112 @@
 /* If something is hard to do with TailWind we can do regular css in here */
+
+#QueueButton {
+    transition: .3s all ease-out;
+}
+
+#QueueButton:hover {
+    box-shadow: 0 0 5rem #0003;
+}
+
+.shadow-custom-lg {
+    box-shadow: 0 0 15rem #0002;
+}
+/* Ice breaker knoppen */
+.blocks{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btn {
+  display: block;
+  text-align: center;
+  background: #F0E6C2;   
+  color: #000;    
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 40px 100px;
+}
+
+/* Questions */
+#question-list{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  align-items: center;
+}
+.question-card {
+    background-color: #F0E6C2;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 12px;
+    font-size: 18px;
+}
+
+.question-title{
+    font-family: 'Lalezar', sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    margin-top: 25px;
+    color: #152B38;
+}
+
+@font-face {
+    font-family: 'Lalezar';
+    src: url('fonts/Lalezar-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* overlay achtergrond */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+/* popup box */
+.popup {
+  background: #fff9e6;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  text-align: center;
+  position: relative;
+}
+
+/* sluit-icoon */
+.popup .close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* knoppen in popup */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn.cancel {
+  background: #ccc;
+  color: #000;
+}
+
+.btn.confirm {
+  background: #3fa75b;
+  color: #fff;
+  font-weight: bold;
+}

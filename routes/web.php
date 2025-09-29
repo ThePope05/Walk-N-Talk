@@ -4,43 +4,67 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\QueueController;
+use App\Http\Controllers\WalkMatchController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\QuestionController;
+
 
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::name('user.')->group(function () {
 
-    // Login/Registratie
-    Route::get('user/login', fn() => view('user.login'))->name('login');
-    Route::post('user/login', [UserController::class, 'loginUser'])->name('login');
+// LOGIN ROUTES
+Route::get('user/login', function () {
+    return view('user/login');
+})->name('login');
+Route::post('user/login', [UserController::class, 'loginUser'])->name('login');
 
-    Route::get('user/register', fn() => view('user.register'))->name('register');
-    Route::post('user/register', [UserController::class, 'registerUser'])->name('register');
+// REGISTER ROUTES
+Route::get('user/register', function () {
+    return view('user/register');
+})->name('register');
+Route::post('user/register', [UserController::class, 'registerUser'])->name('register');
 
-    // Logout
-   // Verwijder of laat deze GET route staan (optioneel)
 Route::get('user/logout', function () {
-    if (Auth::check()) {
+    if (Auth::check())
         Auth::logout();
-    }
-    return redirect('/');
-});
 
-// Voeg deze POST route toe
-Route::post('user/logout', function () {
-    if (Auth::check()) {
-        Auth::logout();
-    }
     return redirect('/');
 })->name('logout');
 
+// API ENDPOINTS
+Route::get('/queue/entries', [QueueController::class, 'getEntries']);
+Route::get('/user/hasUnfinishedWalk', [WalkMatchController::class, 'hasUnfinishedWalk']);
 
-    // ✅ Beveiligde routes
-    Route::middleware('auth')->group(function () {
+Route::get('user/queue/start', [QueueController::class, 'queueStart'])->middleware('auth')->name('queue.start');
+Route::get('user/queue/stop', [QueueController::class, 'queueStop'])->middleware('auth')->name('queue.stop');
+Route::get('user/queue/isQueueing', [QueueController::class, 'isQueueing'])->middleware('auth')->name('user.isQueueing');
+Route::get('user/queue/queuedAt', [QueueController::class, 'userQueuedAt'])->middleware('auth')->name('user.queuedAt');
 
-        // Profiel bekijken
-    Route::get('user/profile', fn() => view('user.profile'))->name('profile');
+Route::get('/user/online_count', [UserController::class, 'getUserCount']);
+
+// START MATCH 
+Route::post('/walkMatch', [WalkMatchController::class, 'createMatch'])->middleware('auth');
+
+// MATCH PAGE
+Route::get('/match', [WalkMatchController::class, 'matchPage'])->middleware('hasMatch')->name('match');
+
+Route::get('/ice-breakers', function () {
+    return view('ice-breakers');
+})->middleware('hasMatch')->name('ice-breakers');
+
+Route::get('/questions/{category}', [QuestionController::class, 'show'])
+    ->middleware('hasMatch')
+    ->name('questions.show');
+
+Route::get('/walk/end', [WalkMatchController::class, 'finishWalk'])->middleware('auth')->name('walk.end');
+
+Route::get('user/profile', function() { 
+    view('user.profile')->name('profile'); 
+})->middleware('auth');
 
 // PUT: Update profiel
 Route::put('user/profile', function (Request $request) {
@@ -60,6 +84,4 @@ Route::put('user/profile', function (Request $request) {
     $user->update($validated);
 
     return redirect()->route('user.profile')->with('success', 'Profiel succesvol bijgewerkt!');
-})->name('profile.update');
-    });
-});
+})->middleware('auth')->name('profile.update');
