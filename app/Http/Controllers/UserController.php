@@ -70,7 +70,7 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/'); // TODO: change to queue page when we have that
+            return redirect('/');
         }
 
         return redirect()->back()->onlyInput('email')->withErrors(['msg' => 'The provided credentials do not match our records.']);
